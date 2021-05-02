@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EllerAlg", "EllerAlg\EllerA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AStarAlgorithm", "AStarAlgorithm\AStarAlgorithm.csproj", "{44649DA1-BF44-479C-8F74-A06E275D7E57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cells", "Cells\Cells.csproj", "{E522E8F9-D4A9-4FA3-841F-7EF7FE2F58D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cells", "Cells\Cells.csproj", "{E522E8F9-D4A9-4FA3-841F-7EF7FE2F58D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

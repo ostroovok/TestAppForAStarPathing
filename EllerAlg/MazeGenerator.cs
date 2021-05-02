@@ -9,6 +9,10 @@ namespace EllerAlg
 {
     public class MazeGenerator
     {
+
+        private int[] _right;
+        private int[] _bot;
+        private int _counter = 0;
         public int Width { get; }
         public List<Cell[]> Maze { get; private set; }
 
@@ -20,33 +24,27 @@ namespace EllerAlg
 
             _rnd = new Random();
 
-            Maze = new List<Cell[]>();
-
-            Maze.Add(new Cell[Width]);
-            for (int j = 0; j < Width; j++)
+            Maze = new List<Cell[]>
             {
+                new Cell[Width]
+            };
+            for (int j = 0; j < Width; j++)
                 Maze.Last()[j] = new Cell(new Vector2Int(Maze.Count, j));
+
+            _right = new int[Width];
+            _bot = new int[Width];
+
+            for (int i = 0; i < Width; i++)
+            {
+                _right[i] = i;
+                _bot[i] = i;
             }
+
         }
 
         public void Generate()
         {
-
-            var right = new int[Width];
-            var bot = new int[Width];
-            for (int i = 0; i < Width; i++)
-            {
-                right[i] = i;
-                bot[i] = i;
-            }
-
-            var counter = 0;
-            for(; ; )
-            {
-                Maze.Add(CreateOneRow(counter, right, bot));
-                PrintWithOutNumbers(0, 1, Maze.Last());
-                Thread.Sleep(1000);
-            }
+             Maze.Add(CreateOneRow(_counter, _right, _bot));
         }
         #region Private Methods
         private Cell[] CreateOneRow(int i, int[] right, int[] bot)
@@ -63,6 +61,7 @@ namespace EllerAlg
                 if (j != Width - 1 && j + 1 != right[j] && _rnd.NextDouble() < 0.5)
                 {
                     temp[j].Right = false;
+                    temp[j + 1].Left = false;
 
                     right[bot[j + 1]] = right[j];
 
@@ -84,7 +83,12 @@ namespace EllerAlg
                     bot[j] = j;
                 }
                 else
+                {
                     temp[j].Bottom = false;
+                    if (!Maze[i - 1][j].Bottom)
+                        temp[j].Top = false;
+                }
+                    
             }
             return temp;
         }
