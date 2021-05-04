@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace EllerAlg
 {
-    public class MazeGenerator
+    public class MazeGenerator : IMaze
     {
 
         private int[] _right;
         private int[] _bot;
         private int _counter = 0;
         public int Width { get; }
-        public List<Cell[]> Maze { get; private set; }
+        public List<Cell[]> Maze { get; set; }
 
         private Random _rnd;
 
@@ -85,7 +85,7 @@ namespace EllerAlg
                 else
                 {
                     temp[j].Bottom = false;
-                    if (!Maze[i - 1][j].Bottom)
+                    if (i > 1 && !Maze[i - 1][j].Bottom)
                         temp[j].Top = false;
                 }
                     

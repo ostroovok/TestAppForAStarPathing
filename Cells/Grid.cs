@@ -1,5 +1,6 @@
-using AStar;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Cells
 {
@@ -22,6 +23,26 @@ namespace Cells
             Height = cells.GetUpperBound(0) + 1;
         }
 
+        public Grid(List<Cell[]> cells)
+        {
+            Width = cells.Last().Length;
+            Height = cells.Count;
+            Cells = new Cell[Height, Width];
+            for (int i = 0; i < cells.Count; i++)
+            {
+                for (int j = 0; j < cells[i].Length; j++)
+                {
+                    Cells[i, j] = new Cell(cells[i][j].Location)
+                    {
+                        Left = cells[i][j].Left,
+                        Bottom = cells[i][j].Bottom,
+                        Right = cells[i][j].Right,
+                        Top = cells[i][j].Top
+                    };
+                }
+            }
+        }
+
         public Grid(int width, int height)
         {
             Width = width;
@@ -33,7 +54,6 @@ namespace Cells
 
         public void Reset()
         {
-            Random rnd = new Random();
             for (var x = 0; x <= Cells.GetUpperBound(0); x++)
             {
                 for (var y = 0; y <= Cells.GetUpperBound(1); y++)
@@ -43,11 +63,10 @@ namespace Cells
 
                     if (cell == null)
                     {
-                        Cells[x, y] = new Cell(new Vector2Int(x, y), rnd.Next(1, 4));
+                        Cells[x, y] = new Cell(new Vector2Int(x, y));
                     }
                     else
                     {
-                        cell.Value = rnd.Next(1, 4);
                         cell.G = 0;
                         cell.H = 0;
                         cell.F = 0;
@@ -64,9 +83,9 @@ namespace Cells
             {
                 for (var y = 0; y <= Cells.GetUpperBound(1); y++)
                 {
-                    System.Console.Write(Cells[x, y].Blocked + ", ");
+                    //Console.Write(Cells[x, y].Blocked + ", ");
                 }
-                System.Console.WriteLine();
+                Console.WriteLine();
             }
         }
 

@@ -10,19 +10,28 @@ namespace EllerAlg
 {
     public class Maze
     {
-
-        private MazeGenerator _maze;
+         
+        private IMaze _maze;
         public Maze(int width)
         {
             _maze = new MazeGenerator(width);
         }
-        public Cell[] Last() => _maze.Maze.Last();
 
+        public Maze(int width, int height)
+        {
+            _maze = new MazeCreator(width, height);
+        }
+
+        public Cell[] Last() => _maze.Maze.Last();
+        public void Create()
+        {
+            _maze.Generate();
+        }
         public void StartGenerate()
         {
             while (true)
             {
-                lock(_maze)
+                lock(this)
                     _maze.Generate();
                 Thread.Sleep(2000);
             }     

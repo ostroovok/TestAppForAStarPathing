@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace EllerAlg
 {
-    public class MazeCreator
+    public class MazeCreator : IMaze
     {
         public int Width { get; }
         public int Height { get; private set; }
-        public Cell[][] Maze { get; private set; }
+        public List<Cell[]> Maze { get; set; }
 
         private Random _rnd;
 
@@ -21,29 +21,19 @@ namespace EllerAlg
             Width = width;
             Height = height;
             _rnd = new Random();
-            Maze = new Cell[Height][];
-            for (int i = 0; i < Height; i++)
-            {
-                Maze[i] = new Cell[Width];
-                for (int j = 0; j < Width; j++)
-                {
-                    Maze[i][j] = new Cell(new Vector2Int(i,j));
-                }
-            }
         }
 
-        public Cell[][] Generate()
+        public void Generate()
         {
-
-            Maze = new Cell[Height][];
+            Maze = new();
             for (int i = 0; i < Height; i++)
             {
-                Maze[i] = new Cell[Width];
+                var row = new Cell[Width];
                 for (int j = 0; j < Width; j++)
                 {
-                    Maze[i][j] = new Cell(new Vector2Int(i, j));
+                    row[j] = new Cell(new Vector2Int(i, j));
                 }
-
+                Maze.Add(row);
             }
 
             var temp = new int[Width];
@@ -84,12 +74,6 @@ namespace EllerAlg
                     else
                         Maze[i][j].Bottom = false;
                 }
-
-                for (int c = 0; c < temp.Length; c++)
-                {
-                    Console.Write(temp[c]+ "  ");
-                }
-                Console.WriteLine();
             }
 
             for (int j = 0; j < Width; j++)
@@ -114,9 +98,6 @@ namespace EllerAlg
 
                 bot[j] = j;
             }
-            if(Console.ReadKey().Key == ConsoleKey.W)
-                PrintWithOutNumbers(0, Height, Maze);
-            return Maze;
         }
 
         public void PrintWithOutNumbers(int start, int h, Cell[][] maze)
