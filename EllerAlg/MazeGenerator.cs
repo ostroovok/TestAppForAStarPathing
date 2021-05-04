@@ -44,7 +44,13 @@ namespace EllerAlg
 
         public void Generate()
         {
-             Maze.Add(CreateOneRow(_counter, _right, _bot));
+            var temp = CreateOneRow(_counter, _right, _bot);
+            for (int i = 0; i < temp.Length; i++)
+            {
+                if (Maze.Count > 1 && !Maze.Last()[i].Bottom)
+                    temp[i].Top = false;
+            }
+            Maze.Add(temp);
         }
         #region Private Methods
         private Cell[] CreateOneRow(int i, int[] right, int[] bot)
@@ -85,8 +91,8 @@ namespace EllerAlg
                 else
                 {
                     temp[j].Bottom = false;
-                    if (i > 1 && !Maze[i - 1][j].Bottom)
-                        temp[j].Top = false;
+                    //if (i > 1 && !Maze[i - 1][j].Bottom)
+                        //temp[j].Top = false;
                 }
                     
             }

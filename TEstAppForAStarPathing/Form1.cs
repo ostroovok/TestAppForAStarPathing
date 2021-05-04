@@ -89,6 +89,7 @@ namespace TEstAppForAStarPathing
             {
                 _paintThread = null;
                 _mazeThread = null;
+                _aStarThread = null;
             }
         }
 
@@ -98,14 +99,14 @@ namespace TEstAppForAStarPathing
             {
                 lock (_maze)
                 {
-                    if(_maze.MazeList.Count > 4)
+                    if(_maze.MazeList.Count > 1)
                     {
                         _grid = new(_maze.MazeList);
                         _aStar = new AStarSearch(_grid);
                         //lock (_aStar)
                         {
                             _path = _aStar.Find(_lastPoint);
-                            _lastPoint = _path.Last().Location;
+                            _lastPoint = _path?.Last().Location ?? new Vector2Int(0,0);
                         }
                         Thread.Sleep(100);
                     }
