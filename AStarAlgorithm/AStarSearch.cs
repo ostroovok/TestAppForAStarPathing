@@ -105,13 +105,22 @@ namespace AStar
 
             return path.ToArray();
         }
-        public Cell[] Find(Vector2Int start, Vector2Int goal)
+        public Cell[] Find(Vector2Int start)
         {
 
             Reset();
+            Cell goalCell = null;
+            for (int i = 0; i < _grid.Size.X; i++)
+            {
+                if(!_grid[new Vector2Int(i, _grid.Size.Y - 1)].Bottom && !_grid[new Vector2Int(i, _grid.Size.Y - 1)].Top)
+                    goalCell = _grid[new Vector2Int(i, _grid.Size.Y - 1)];          //last point\
+            }
+
+            if (goalCell == null)
+                return null;
 
             Cell startCell = _grid[start]; //first point
-            Cell goalCell = _grid[goal];   //last point\
+               
 
             _open.Enqueue(startCell, 0);   // not checked
 
@@ -140,9 +149,9 @@ namespace AStar
                         proposed.Y < 0 || proposed.Y >= bounds.Y)
                         continue;
 
-                    Cell neighbour = _grid[proposed];
+                    if (node.Walls[i]) continue;
 
-                    if (neighbour.Walls[i]) continue;
+                    Cell neighbour = _grid[proposed];
 
                     if (_grid[neighbour.Location].Closed) continue;
 

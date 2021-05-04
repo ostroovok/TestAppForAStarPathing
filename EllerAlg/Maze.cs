@@ -33,7 +33,7 @@ namespace EllerAlg
             {
                 lock(this)
                     _maze.Generate();
-                Thread.Sleep(2000);
+                Thread.Sleep(1000);
             }     
         }
         public List<Cell[]> MazeList { get => _maze.Maze; }

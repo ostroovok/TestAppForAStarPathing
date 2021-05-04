@@ -28,8 +28,8 @@ namespace EllerAlg
             {
                 new Cell[Width]
             };
-            for (int j = 0; j < Width; j++)
-                Maze.Last()[j] = new Cell(new Vector2Int(Maze.Count, j));
+            //for (int j = 0; j < Width; j++)
+                //Maze.Last()[j] = new Cell(new Vector2Int(Maze.Count, j));
 
             _right = new int[Width];
             _bot = new int[Width];
@@ -39,7 +39,7 @@ namespace EllerAlg
                 _right[i] = i;
                 _bot[i] = i;
             }
-
+            Maze.Clear();
         }
 
         public void Generate()
@@ -53,7 +53,7 @@ namespace EllerAlg
 
             for (int c = 0; c < Width; c++)
             {
-                temp[c] = new Cell(new Vector2Int(i, c));
+                temp[c] = new Cell(new Vector2Int(c, i));
             }
 
             for (int j = 0; j < Width; j++)
@@ -90,6 +90,7 @@ namespace EllerAlg
                 }
                     
             }
+            _counter++;
             return temp;
         }
 

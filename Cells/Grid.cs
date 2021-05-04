@@ -14,7 +14,7 @@ namespace Cells
         public Cell this[int x, int y] => Cells[x, y];
 
         public Vector2Int Size => new Vector2Int(Width, Height);
-        public Cell this[Vector2Int location] => Cells[location.X, location.Y];
+        public Cell this[Vector2Int location] =>  Cells[location.Y, location.X];
 
         public Grid(Cell[,] cells)
         {
@@ -61,18 +61,11 @@ namespace Cells
 
                     var cell = Cells[x, y];
 
-                    if (cell == null)
-                    {
-                        Cells[x, y] = new Cell(new Vector2Int(x, y));
-                    }
-                    else
-                    {
-                        cell.G = 0;
-                        cell.H = 0;
-                        cell.F = 0;
-                        cell.Closed = false;
-                        cell.Parent = null;
-                    }
+                    cell.G = 0;
+                    cell.H = 0;
+                    cell.F = 0;
+                    cell.Closed = false;
+                    cell.Parent = null;
                 }
             }
         }
