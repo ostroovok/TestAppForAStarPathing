@@ -24,7 +24,7 @@ namespace TEstAppForAStarPathing
         private Cell[] _path;
         private Grid _grid;
         private Bitmap _myBitmap;
-        private Vector2Int _lastPoint = new(0,0);
+        private Vector2Int _lastPoint;
         public Form1()
         {
             InitializeComponent();
@@ -76,6 +76,7 @@ namespace TEstAppForAStarPathing
                 _aStarThread = new(AStarSearchSteps);
                 _mazeThread = new Thread(_maze.StartGenerate);
                 _paintThread = new Thread(PanelRepaint);
+                _lastPoint = new Vector2Int((int)numericUpDown2.Value, (int)numericUpDown3.Value);
 
                 _mazeThread.Name = "Generator";
                 _aStarThread.Name = "AStar";
@@ -90,6 +91,8 @@ namespace TEstAppForAStarPathing
                 _paintThread = null;
                 _mazeThread = null;
                 _aStarThread = null;
+                _myBitmap = new Bitmap(_myBitmap.Size.Width, _myBitmap.Size.Height);
+                pictureBox1.Image = _myBitmap;
             }
         }
 

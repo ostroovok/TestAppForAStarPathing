@@ -109,19 +109,25 @@ namespace AStar
         {
 
             Reset();
-            Cell goalCell = null;
+
+            Cell startCell = _grid[start];
+            var max = new Cell(new Vector2Int(0, 0)) { H = 1000.0 };
+            Cell goalCell;
             for (int i = 0; i < _grid.Size.X; i++)
             {
                 if(!_grid[new Vector2Int(i, _grid.Size.Y - 1)].Bottom && !_grid[new Vector2Int(i, _grid.Size.Y - 1)].Top)
-                    goalCell = _grid[new Vector2Int(i, _grid.Size.Y - 1)];          //last point\
+                {
+                    goalCell = _grid[new Vector2Int(i, _grid.Size.Y - 1)];
+                    if (Heuristic(startCell, goalCell) < max.H)
+                        max = goalCell;
+                }
             }
+
+            goalCell = max;
 
             if (goalCell == null)
                 return null;
-
-            Cell startCell = _grid[start]; //first point
                
-
             _open.Enqueue(startCell, 0);   // not checked
 
             var bounds = _grid.Size;
