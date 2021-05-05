@@ -42,6 +42,8 @@ namespace TEstAppForAStarPathing
 
             for (int j = 0; j < _maze.MazeList[0].Length; j++)
             {
+                //if (_maze.MazeList.Last()[j].Location.Y * scalar > panel1.Size.Height)
+                    //PanelResize();
                 if (_maze.MazeList.Last()[j].Right)
                     g.DrawLine(new Pen(new SolidBrush(Color.Black)), _maze.MazeList.Last()[j].Location.X * scalar + scalar,
                         _maze.MazeList.Last()[j].Location.Y * scalar,
@@ -52,10 +54,16 @@ namespace TEstAppForAStarPathing
                         _maze.MazeList.Last()[j].Location.X * scalar + scalar, _maze.MazeList.Last()[j].Location.Y * scalar + scalar);
             }
             if (_path != null)
-                //lock(_aStar)
-                    RenderPath(_path.First().Location, _lastPoint, _path, scalar, g);
+                RenderPath(_path.First().Location, _lastPoint, _path, scalar, g);
 
             pictureBox1.Image = _myBitmap;
+        }
+
+        private void PanelResize()
+        {
+            panel1.Size = new Size(panel1.Size.Width, panel1.Size.Height * 2);
+            pictureBox1.Size = panel1.Size;
+            _myBitmap = new Bitmap(panel1.Size.Width, panel1.Size.Height);
         }
 
         private void PanelRepaint()
@@ -106,11 +114,10 @@ namespace TEstAppForAStarPathing
                     {
                         _grid = new(_maze.MazeList);
                         _aStar = new AStarSearch(_grid);
-                        //lock (_aStar)
-                        {
-                            _path = _aStar.Find(_lastPoint);
-                            _lastPoint = _path?.Last().Location ?? new Vector2Int(0,0);
-                        }
+
+                        _path = _aStar.Find(_lastPoint);
+                        _lastPoint = _path?.Last().Location ?? new Vector2Int(0,0);
+                        
                         Thread.Sleep(100);
                     }
                 }
@@ -126,11 +133,6 @@ namespace TEstAppForAStarPathing
             if (pathh.Count() > 1)
                 g.DrawLines(new Pen(new SolidBrush(Color.Blue), 4),
                 pathh);
-
-            //CircleAtPoint(g, new PointF(start.X * scalar/2, start.Y * scalar/2), 10, Color.Red);
-            //CircleAtPoint(g, new PointF(goal.X * scalar/2, goal.Y * scalar/2), 10, Color.Blue);
-
-            //pictureBox1.Image = _myBitmap;
         }
         private void CircleAtPoint(Graphics graphics, PointF center, float radius, Color color)
         {

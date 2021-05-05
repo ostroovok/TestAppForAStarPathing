@@ -35,75 +35,19 @@ namespace AStar
             _open.Clear();
         }
 
-        public Cell[] GreedyFind(Vector2Int start, Vector2Int goal)
+        private void CreateGoalCell(Cell startCell, out Cell goalCell)
         {
-
-            Reset();
-
-            Cell startCell = _grid[start]; //first point
-            Cell goalCell = _grid[goal];   //last point
-
-            _open.Enqueue(startCell, 0);   // not checked
-
-            var bounds = _grid.Size;
-
-            Cell node = null;
-
-            while (_open.Count > 0)
+            var max = new Cell(new Vector2Int(0, 0)) { H = 1000.0 };
+            for (int i = 0; i < _grid.Size.X; i++)
             {
-                node = _open.Dequeue();
-
-                node.Closed = true;
-
-                var g = node.G + 1;
-
-                if (goalCell.Location == node.Location) break;
-
-                Vector2Int proposed = new Vector2Int(0, 0);
-
-                for (var i = 0; i < PathingConstants.Directions.Length; i++)
+                if (!_grid[new Vector2Int(i, _grid.Size.Y - 1)].Bottom && !_grid[new Vector2Int(i, _grid.Size.Y - 1)].Top)
                 {
-                    var direction = PathingConstants.Directions[i];
-                    proposed.X = node.Location.X + direction.X;
-                    proposed.Y = node.Location.Y + direction.Y;
-                    if (proposed.X < 0 || proposed.X >= bounds.X ||
-                        proposed.Y < 0 || proposed.Y >= bounds.Y)
-                        continue;
-
-                    Cell neighbour = _grid[proposed];
-
-                    if (neighbour.Walls[i]) continue;
-
-                    if (_grid[neighbour.Location].Closed) continue;
-
-                    if (!_open.Contains(neighbour))
-                    {
-
-                        neighbour.G = g;
-                        neighbour.H = Heuristic(neighbour, node);
-                        neighbour.Parent = node;
-                        // F will be set by the queue
-                        _open.Enqueue(neighbour, neighbour.G + neighbour.H);
-
-                    }
-                    else if (g + neighbour.H  < neighbour.F)
-                    {
-                        neighbour.G = g;
-                        neighbour.F = neighbour.G + neighbour.H;
-                        neighbour.Parent = node;
-                    }
+                    goalCell = _grid[new Vector2Int(i, _grid.Size.Y - 1)];
+                    if (Heuristic(startCell, goalCell) < max.H)
+                        max = goalCell;
                 }
             }
-
-            var path = new Stack<Cell>();
-
-            while (node != null)
-            {
-                path.Push(node);
-                node = node.Parent;
-            }
-
-            return path.ToArray();
+            goalCell = max;
         }
         public Cell[] Find(Vector2Int start)
         {
@@ -111,22 +55,17 @@ namespace AStar
             Reset();
 
             Cell startCell = _grid[start];
-            var max = new Cell(new Vector2Int(0, 0)) { H = 1000.0 };
-            Cell goalCell;
+            //Cell goalCell;
+            //CreateGoalCell(startCell, out goalCell);
+
+            Cell[] goalCells = new Cell[_grid.Size.X];
             for (int i = 0; i < _grid.Size.X; i++)
             {
-                if(!_grid[new Vector2Int(i, _grid.Size.Y - 1)].Bottom && !_grid[new Vector2Int(i, _grid.Size.Y - 1)].Top)
-                {
-                    goalCell = _grid[new Vector2Int(i, _grid.Size.Y - 1)];
-                    if (Heuristic(startCell, goalCell) < max.H)
-                        max = goalCell;
-                }
+                goalCells[i] = _grid[new Vector2Int(i, _grid.Size.Y - 1)];
             }
 
-            goalCell = max;
-
-            if (goalCell == null)
-                return null;
+            //if (goalCell == null)
+                //return null;
                
             _open.Enqueue(startCell, 0);   // not checked
 
@@ -142,7 +81,12 @@ namespace AStar
 
                 var g = node.G + 1;
 
-                if (goalCell.Location == node.Location) break;
+                foreach (var goalCell in goalCells)
+                {
+                    if (goalCell.Location == node.Location) 
+                        return LinkNodes(node);
+                }
+                
 
                 Vector2Int proposed = new(0, 0);
 
@@ -165,7 +109,7 @@ namespace AStar
                     {
 
                         neighbour.G = g;
-                        neighbour.H = Heuristic(neighbour, goalCell);
+                        neighbour.H = Heuristic(neighbour, new Cell(new Vector2Int(neighbour.Location.X, _grid.Size.Y - 1)));
                         neighbour.Parent = node;
                         // F will be set by the queue
                         _open.Enqueue(neighbour, neighbour.G + neighbour.H);
@@ -180,6 +124,11 @@ namespace AStar
                 }
             }
 
+            return LinkNodes(node);
+        }
+
+        private Cell[] LinkNodes(Cell node)
+        {
             var path = new Stack<Cell>();
 
             while (node != null)
