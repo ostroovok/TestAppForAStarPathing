@@ -12,6 +12,7 @@ namespace EllerAlg
     {
          
         private IMaze _maze;
+        private bool _stop = true;
         public Maze(int width)
         {
             _maze = new MazeGenerator(width);
@@ -27,13 +28,18 @@ namespace EllerAlg
         {
             _maze.Generate();
         }
+        public void Stop()
+        {
+            _stop = false;
+            _maze.Clear();
+        }
         public void StartGenerate()
         {
-            while (true)
+            while (_stop)
             {
                 lock(this)
                     _maze.Generate();
-                Thread.Sleep(1000);
+                Thread.Sleep(50);
             }     
         }
         public List<Cell[]> MazeList { get => _maze.Maze; }

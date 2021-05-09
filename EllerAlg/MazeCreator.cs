@@ -138,5 +138,10 @@ namespace EllerAlg
                 Console.WriteLine();
             }
         }
+
+        public void Clear()
+        {
+            Maze.Clear();
+        }
     }
 }

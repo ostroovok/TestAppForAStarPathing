@@ -28,8 +28,6 @@ namespace EllerAlg
             {
                 new Cell[Width]
             };
-            //for (int j = 0; j < Width; j++)
-                //Maze.Last()[j] = new Cell(new Vector2Int(Maze.Count, j));
 
             _right = new int[Width];
             _bot = new int[Width];
@@ -51,6 +49,11 @@ namespace EllerAlg
                     temp[i].Top = false;
             }
             Maze.Add(temp);
+        }
+
+        public void Clear()
+        {
+            Maze.Clear();
         }
         #region Private Methods
         private Cell[] CreateOneRow(int i, int[] right, int[] bot)
@@ -89,12 +92,8 @@ namespace EllerAlg
                     bot[j] = j;
                 }
                 else
-                {
                     temp[j].Bottom = false;
-                    //if (i > 1 && !Maze[i - 1][j].Bottom)
-                        //temp[j].Top = false;
-                }
-                    
+
             }
             _counter++;
             return temp;
