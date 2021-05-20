@@ -10,6 +10,7 @@ namespace AStar
 
         private readonly IGridProvider _grid;
         private readonly FastPriorityQueue _open;
+        public static int Closed { get; private set; }
 
         public AStarSearch(IGridProvider grid)
         {
@@ -17,7 +18,10 @@ namespace AStar
             _grid = grid;
             _open = new FastPriorityQueue(_grid.Size.X * _grid.Size.Y);
         }
-
+        public static void NullifyClosedCount()
+        {
+            Closed = 0;
+        }
         private double Heuristic(Cell cell, Cell goal)
         {
 
@@ -78,6 +82,7 @@ namespace AStar
                 node = _open.Dequeue();
 
                 node.Closed = true;
+                Closed++;
 
                 var g = node.G + 1;
 
