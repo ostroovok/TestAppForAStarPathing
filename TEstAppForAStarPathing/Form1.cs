@@ -111,18 +111,21 @@ namespace TEstAppForAStarPathing
                 _myBitmap = new Bitmap(pictureBox1.Size.Width, pictureBox1.Size.Height);
 
                 _maze = new Maze((int)numericUpDown1.Value);
+
+                //_aStarThread = new(AStarSearchSteps);
                 
-                _aStarThread = new(AStarSearchSteps);
                 _mazeThread = new Thread(_maze.StartGenerate);
                 _paintThread = new Thread(PanelRepaint);
                 _lastPoint = new Vector2Int((int)numericUpDown2.Value, (int)numericUpDown3.Value);
 
                 _mazeThread.Name = "Generator";
-                _aStarThread.Name = "AStar";
+                //_aStarThread.Name = "AStar";
                 _paintThread.Name = "Painter";
 
                 _mazeThread.Start();
-                _aStarThread.Start();
+                Task t = Task.Run(() =>
+                    AStarSearchSteps());
+                //_aStarThread.Start();
                 _paint = true;
                 _paintThread.Start();
                 
@@ -164,8 +167,14 @@ namespace TEstAppForAStarPathing
             PointF[] pathh = path.Select(n => new PointF(n.Location.X * scalar + scalar/2, n.Location.Y * scalar + scalar / 2)).ToArray();
 
             if (pathh.Count() > 1)
-                g.DrawLines(new Pen(new SolidBrush(Color.Blue), scalar/8),
+            {
+                g.DrawLines(new Pen(new SolidBrush(Color.Blue), scalar / 8),
                 pathh);
+            }
+            if(pathh.Count() >= 1)
+            {
+                CircleAtPoint(g, pathh.First(), _scalar/10, Color.Red);
+            }
         }
         private void CircleAtPoint(Graphics graphics, PointF center, float radius, Color color)
         {

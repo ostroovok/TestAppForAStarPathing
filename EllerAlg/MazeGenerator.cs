@@ -24,10 +24,12 @@ namespace EllerAlg
 
             _rnd = new Random();
 
-            Maze = new List<Cell[]>
+            Maze = new List<Cell[]>();
+            /*
             {
                 new Cell[Width]
             };
+            */
 
             _right = new int[Width];
             _bot = new int[Width];
@@ -37,7 +39,7 @@ namespace EllerAlg
                 _right[i] = i;
                 _bot[i] = i;
             }
-            Maze.Clear();
+            //Maze.Clear();
         }
 
         public void Generate()
@@ -45,8 +47,11 @@ namespace EllerAlg
             var temp = CreateOneRow(_counter, _right, _bot);
             for (int i = 0; i < temp.Length; i++)
             {
-                if (Maze.Count > 1 && !Maze.Last()[i].Bottom)
+                if (Maze.Count > 1 && !Maze.Last()[i].Bottom) // баг тут, не удаляет потолок
+                {
                     temp[i].Top = false;
+                }
+                    
             }
             Maze.Add(temp);
         }
@@ -97,36 +102,6 @@ namespace EllerAlg
             }
             _counter++;
             return temp;
-        }
-
-        private void PrintWithOutNumbers(int start, int h, Cell[] maze)
-        {
-            for (int i = start; i < h; i++)
-            {
-                for (int j = 0; j < maze.Length; j++)
-                {
-                    if (maze[j].Bottom)
-                    {
-                        Console.Write("__");
-                    }
-                    else
-                    {
-                        Console.Write("  ");
-                    }
-                    if (maze[j].Right)
-                    {
-                        Console.Write("|");
-                    }
-                    else
-                    {
-                        ConsoleColor color = Console.ForegroundColor;
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.Write(".");
-                        Console.ForegroundColor = color;
-                    }
-                }
-                Console.WriteLine();
-            }
         }
         #endregion
     }
