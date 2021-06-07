@@ -14,7 +14,7 @@ namespace Cells
         public Cell this[int x, int y] => Cells[x, y];
 
         public Vector2Int Size => new Vector2Int(Width, Height);
-        public Cell this[Vector2Int location] =>  Cells[location.Y, location.X];
+        public Cell this[Vector2Int location] => Cells[location.Y, location.X];
 
         public Grid(Cell[,] cells)
         {

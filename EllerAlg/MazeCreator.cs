@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace EllerAlg
 {
@@ -57,7 +54,7 @@ namespace EllerAlg
                         bot[temp[j]] = bot[j + 1];
 
                         temp[j] = j + 1;
-                        
+
                         bot[j + 1] = j;
                     }
 
@@ -70,7 +67,7 @@ namespace EllerAlg
                         temp[j] = j;
 
                         bot[j] = j;
-                    } 
+                    }
                     else
                         Maze[i][j].Bottom = false;
                 }

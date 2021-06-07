@@ -1,17 +1,13 @@
-﻿using System;
+﻿using AStar;
+using Cells;
+using EllerAlg;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Threading;
 using System.Windows.Forms;
-using EllerAlg;
-using AStar;
-using Cells;
-using System.Diagnostics;
 
 namespace TEstAppForAStarPathing
 {
@@ -42,7 +38,7 @@ namespace TEstAppForAStarPathing
                 return;
 
             _scalar = (int)numericUpDown4.Value;
-            
+
             if (_maze == null || _maze.MazeList.Count == 0)
                 return;
 
@@ -105,13 +101,13 @@ namespace TEstAppForAStarPathing
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(!_paint)
+            if (!_paint)
             {
                 pictureBox1.Image = null;
                 _myBitmap = new Bitmap(pictureBox1.Size.Width, pictureBox1.Size.Height);
 
                 _maze = new Maze((int)numericUpDown1.Value);
-                
+
                 _aStarThread = new(AStarSearchSteps);
                 _mazeThread = new Thread(_maze.StartGenerate);
                 _paintThread = new Thread(PanelRepaint);
@@ -125,7 +121,7 @@ namespace TEstAppForAStarPathing
                 _aStarThread.Start();
                 _paint = true;
                 _paintThread.Start();
-                
+
             }
             else
             {
@@ -142,30 +138,31 @@ namespace TEstAppForAStarPathing
             {
                 lock (_maze)
                 {
-                    if(_maze.MazeList.Count > 1)
+                    if (_maze.MazeList.Count > 1)
                     {
                         _grid = new(_maze.MazeList);
                         _aStar = new AStarSearch(_grid);
 
                         _path = _aStar.Find(_lastPoint);
-                        _lastPoint = _path?.Last().Location ?? new Vector2Int(0,0);
-                        
+                        _lastPoint = _path?.Last().Location ?? new Vector2Int(0, 0);
+
                         Thread.Sleep(100);
                     }
                 }
-                
+
             }
         }
 
         private void RenderPath(Vector2Int start, Vector2Int goal, IList<Cell> path,
             int scalar, Graphics g)
         {
-            
-            PointF[] pathh = path.Select(n => new PointF(n.Location.X * scalar + scalar/2, n.Location.Y * scalar + scalar / 2)).ToArray();
+
+            PointF[] pathh = path.Select(n => new PointF(n.Location.X * scalar + scalar / 2, n.Location.Y * scalar + scalar / 2)).ToArray();
 
             if (pathh.Count() > 1)
-                g.DrawLines(new Pen(new SolidBrush(Color.Blue), scalar/8),
+                g.DrawLines(new Pen(new SolidBrush(Color.Blue), scalar / 8),
                 pathh);
+            CircleAtPoint(g, pathh[0], _scalar / 10, Color.Red);
         }
         private void CircleAtPoint(Graphics graphics, PointF center, float radius, Color color)
         {
