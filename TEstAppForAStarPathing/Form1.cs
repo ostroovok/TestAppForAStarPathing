@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace TEstAppForAStarPathing
@@ -34,6 +35,7 @@ namespace TEstAppForAStarPathing
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
+
             if (!_paint)
                 return;
 
@@ -67,6 +69,9 @@ namespace TEstAppForAStarPathing
 
         private void PaintMaze(Graphics g)
         {
+
+            _scalar = (int)numericUpDown4.Value;
+
             for (int i = 0; i < _maze.MazeList.Count; i++)
             {
                 for (int j = 0; j < _maze.MazeList[0].Length; j++)
@@ -133,6 +138,17 @@ namespace TEstAppForAStarPathing
                 AStarSearch.NullifyClosedCount();
                 _paint = false;
             }
+
+
+            /*_myBitmap = new Bitmap(pictureBox1.Size.Width, pictureBox1.Size.Height);
+
+            _maze = new Maze((int)numericUpDown1.Value, 10);
+            _maze.Create();
+
+            var g = Graphics.FromImage(_myBitmap);
+            PaintMaze(g);
+
+            pictureBox1.Image = _myBitmap;*/
         }
 
         private void AStarSearchSteps()
@@ -141,7 +157,7 @@ namespace TEstAppForAStarPathing
             {
                 lock (_maze)
                 {
-                    if (_maze.MazeList.Count > 1)
+                    if (_maze.MazeList.Count > 4)
                     {
                         _grid = new(_maze.MazeList);
                         _aStar = new AStarSearch(_grid);

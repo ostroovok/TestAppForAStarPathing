@@ -39,6 +39,7 @@ namespace EllerAlg
                 Thread.Sleep(50);
             }
         }
+
         public List<Cell[]> MazeList { get => _maze.Maze; }
     }
 }
