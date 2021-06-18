@@ -35,6 +35,9 @@ namespace TEstAppForAStarPathing
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -42,17 +45,14 @@ namespace TEstAppForAStarPathing
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -90,7 +90,7 @@ namespace TEstAppForAStarPathing
             this.numericUpDown1.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.numericUpDown1.Location = new System.Drawing.Point(6, 436);
             this.numericUpDown1.Maximum = new decimal(new int[] {
-            250,
+            400,
             0,
             0,
             0});
@@ -103,7 +103,7 @@ namespace TEstAppForAStarPathing
             this.numericUpDown1.Size = new System.Drawing.Size(170, 29);
             this.numericUpDown1.TabIndex = 2;
             this.numericUpDown1.Value = new decimal(new int[] {
-            15,
+            35,
             0,
             0,
             0});
@@ -140,15 +140,39 @@ namespace TEstAppForAStarPathing
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Properties";
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label7);
+            this.groupBox2.Controls.Add(this.label6);
+            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.groupBox2.Location = new System.Drawing.Point(6, 112);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(170, 157);
+            this.groupBox2.TabIndex = 11;
+            this.groupBox2.TabStop = false;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(7, 63);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(15, 19);
+            this.label7.TabIndex = 1;
+            this.label7.Text = "_";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(7, 25);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(15, 19);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "_";
+            // 
             // numericUpDown4
             // 
             this.numericUpDown4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.numericUpDown4.Location = new System.Drawing.Point(6, 77);
-            this.numericUpDown4.Maximum = new decimal(new int[] {
-            250,
-            0,
-            0,
-            0});
             this.numericUpDown4.Minimum = new decimal(new int[] {
             1,
             0,
@@ -158,7 +182,7 @@ namespace TEstAppForAStarPathing
             this.numericUpDown4.Size = new System.Drawing.Size(170, 29);
             this.numericUpDown4.TabIndex = 10;
             this.numericUpDown4.Value = new decimal(new int[] {
-            15,
+            20,
             0,
             0,
             0});
@@ -211,7 +235,7 @@ namespace TEstAppForAStarPathing
             this.numericUpDown2.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.numericUpDown2.Location = new System.Drawing.Point(34, 310);
             this.numericUpDown2.Maximum = new decimal(new int[] {
-            14,
+            35,
             0,
             0,
             0});
@@ -239,35 +263,6 @@ namespace TEstAppForAStarPathing
             this.label2.TabIndex = 4;
             this.label2.Text = "Start Point: ";
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.label7);
-            this.groupBox2.Controls.Add(this.label6);
-            this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox2.Location = new System.Drawing.Point(6, 112);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(131, 157);
-            this.groupBox2.TabIndex = 11;
-            this.groupBox2.TabStop = false;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(7, 25);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(50, 19);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "label6";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(7, 63);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(50, 19);
-            this.label7.TabIndex = 1;
-            this.label7.Text = "label7";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -282,11 +277,11 @@ namespace TEstAppForAStarPathing
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
 
         }

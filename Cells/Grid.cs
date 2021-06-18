@@ -70,18 +70,6 @@ namespace Cells
             }
         }
 
-        public void Print()
-        {
-            for (var x = 0; x <= Cells.GetUpperBound(0); x++)
-            {
-                for (var y = 0; y <= Cells.GetUpperBound(1); y++)
-                {
-                    //Console.Write(Cells[x, y].Blocked + ", ");
-                }
-                Console.WriteLine();
-            }
-        }
-
         public int GetNodeId(Vector2Int location) => location.X * Width + location.Y;
     }
 }

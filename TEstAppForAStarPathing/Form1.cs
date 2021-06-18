@@ -14,90 +14,119 @@ namespace TEstAppForAStarPathing
 {
     public partial class Form1 : Form
     {
-        private Thread _paintThread = null;
-        private Thread _mazeThread = null;
-        private Thread _aStarThread = null;
-        private bool _paint;
+        private Task[] _tasks;
+        
         private Maze _maze;
         private AStarSearch _aStar;
         private Cell[] _path;
         private Grid _grid;
-        private Bitmap _myBitmap;
         private Vector2Int _lastPoint;
-        private int _scalar;
+
+        private Bitmap _myBitmap;
+        private bool _paint;
+
         public Form1()
         {
             InitializeComponent();
             panel1.Paint += panel1_Paint;
-            _myBitmap = new Bitmap(panel1.Width, panel1.Height);
+            pictureBox1.Size = new Size(pictureBox1.Width, pictureBox1.Height * 10);
             _paint = false;
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
-            if (!_paint)
-                return;
-
-            _scalar = (int)numericUpDown4.Value;
-
             if (_maze == null || _maze.MazeList.Count == 0)
-                return;
-
-            label6.Text = _maze.MazeList.Count.ToString();
-            label7.Text = AStarSearch.Closed.ToString();
-
-            var g = Graphics.FromImage(_myBitmap);
-            for (int j = 0; j < _maze.MazeList[0].Length; j++)
             {
-                if (_maze.MazeList.Last()[j].Location.Y * _scalar > pictureBox1.Size.Height)
-                    PanelResize(g);
-                if (_maze.MazeList.Last()[j].Right)
-                    g.DrawLine(new Pen(new SolidBrush(Color.Black)), _maze.MazeList.Last()[j].Location.X * _scalar + _scalar,
-                        _maze.MazeList.Last()[j].Location.Y * _scalar,
-                        _maze.MazeList.Last()[j].Location.X * _scalar + _scalar, _maze.MazeList.Last()[j].Location.Y * _scalar + _scalar);
-                if (_maze.MazeList.Last()[j].Bottom)
-                    g.DrawLine(new Pen(new SolidBrush(Color.Black)), _maze.MazeList.Last()[j].Location.X * _scalar,
-                        _maze.MazeList.Last()[j].Location.Y * _scalar + _scalar,
-                        _maze.MazeList.Last()[j].Location.X * _scalar + _scalar, _maze.MazeList.Last()[j].Location.Y * _scalar + _scalar);
+                return;
             }
-            if (_path != null)
-                RenderPath(_path.First().Location, _lastPoint, _path, _scalar, g);
+
+            var scalar = (int)numericUpDown4.Value;
+
+            label6.Text = "Количество\n ячеек: " + _maze.MazeList.Count.ToString();
+            label7.Text = "Колчиество\n closed-ячеек: " + AStarSearch.Closed.ToString();
+
+            using (Graphics g = Graphics.FromImage(_myBitmap))
+            {
+
+                if (_maze.MazeList.Last()[0].Location.Y * scalar > pictureBox1.Size.Height - 2 * scalar)
+                {
+                    PanelResize();
+                    PaintMaze(g, scalar);
+                }
+                else
+                {
+                    if (_maze.MazeList.Count == 1)
+                    {
+                        for (int j = 0; j < _maze.MazeList[0].Length; j++)
+                        {
+                            g.DrawLine(new Pen(new SolidBrush(Color.Black)), _maze.MazeList[0][j].Location.X * scalar,
+                                _maze.MazeList[0][j].Location.Y * scalar,
+                                _maze.MazeList[0][j].Location.X * scalar + scalar, _maze.MazeList[0][j].Location.Y * scalar);
+                        }
+                    }
+                    for (int j = 0; j < _maze.MazeList[0].Length; j++)
+                    {
+                        if (_maze.MazeList.Last()[j].Right)
+                        {
+                            g.DrawLine(new Pen(new SolidBrush(Color.Black)), _maze.MazeList.Last()[j].Location.X * scalar + scalar,
+                                _maze.MazeList.Last()[j].Location.Y * scalar,
+                                _maze.MazeList.Last()[j].Location.X * scalar + scalar, _maze.MazeList.Last()[j].Location.Y * scalar + scalar);
+                        }
+                        if(j == 0)
+                        {
+                            g.DrawLine(new Pen(new SolidBrush(Color.Black)), _maze.MazeList.Last()[0].Location.X * scalar,
+                                _maze.MazeList.Last()[0].Location.Y * scalar,
+                                _maze.MazeList.Last()[0].Location.X * scalar, _maze.MazeList.Last()[0].Location.Y * scalar + scalar);
+                        }
+                        if (_maze.MazeList.Last()[j].Bottom)
+                        {
+                            g.DrawLine(new Pen(new SolidBrush(Color.Black)), _maze.MazeList.Last()[j].Location.X * scalar,
+                                _maze.MazeList.Last()[j].Location.Y * scalar + scalar,
+                                _maze.MazeList.Last()[j].Location.X * scalar + scalar, _maze.MazeList.Last()[j].Location.Y * scalar + scalar);
+                        }
+                            
+                    }
+                }
+                RenderPath(_path, scalar, g);
+            }
 
             pictureBox1.Image = _myBitmap;
         }
 
-        private void PaintMaze(Graphics g)
+        private void PaintMaze(Graphics g, int scalar)
         {
-
-            _scalar = (int)numericUpDown4.Value;
-
             for (int i = 0; i < _maze.MazeList.Count; i++)
             {
                 for (int j = 0; j < _maze.MazeList[0].Length; j++)
                 {
                     if (_maze.MazeList[i][j].Right)
-                        g.DrawLine(new Pen(new SolidBrush(Color.Black)), _maze.MazeList[i][j].Location.X * _scalar + _scalar,
-                            _maze.MazeList[i][j].Location.Y * _scalar,
-                            _maze.MazeList[i][j].Location.X * _scalar + _scalar, _maze.MazeList[i][j].Location.Y * _scalar + _scalar);
+                    {
+                        g.DrawLine(new Pen(new SolidBrush(Color.Black)), _maze.MazeList[i][j].Location.X * scalar + scalar,
+                            _maze.MazeList[i][j].Location.Y * scalar,
+                            _maze.MazeList[i][j].Location.X * scalar + scalar, _maze.MazeList[i][j].Location.Y * scalar + scalar);
+                    }
+
                     if (_maze.MazeList[i][j].Bottom)
-                        g.DrawLine(new Pen(new SolidBrush(Color.Black)), _maze.MazeList[i][j].Location.X * _scalar,
-                            _maze.MazeList[i][j].Location.Y * _scalar + _scalar,
-                            _maze.MazeList[i][j].Location.X * _scalar + _scalar, _maze.MazeList[i][j].Location.Y * _scalar + _scalar);
+                    {
+                        g.DrawLine(new Pen(new SolidBrush(Color.Black)), _maze.MazeList[i][j].Location.X * scalar,
+                            _maze.MazeList[i][j].Location.Y * scalar + scalar,
+                            _maze.MazeList[i][j].Location.X * scalar + scalar, _maze.MazeList[i][j].Location.Y * scalar + scalar);
+                    }
                 }
             }
+            RenderPath(_path, scalar, g);
         }
 
-        private void PanelResize(Graphics g)
+        private void PanelResize()
         {
-            pictureBox1.Size = new Size(pictureBox1.Size.Width - 50, pictureBox1.Size.Height * 2);
-            _myBitmap = new Bitmap(pictureBox1.Size.Width - 50, pictureBox1.Size.Height * 2);
-            PaintMaze(g);
+            pictureBox1.Size = new Size(pictureBox1.Size.Width, pictureBox1.Size.Height * 2);
+            _myBitmap = new Bitmap(pictureBox1.Size.Width, pictureBox1.Size.Height * 2);
         }
 
         private void PanelRepaint()
         {
-            while (true)
+            while (_paint)
             {
                 panel1.Invalidate();
                 Thread.Sleep(50);
@@ -108,27 +137,27 @@ namespace TEstAppForAStarPathing
         {
             if (!_paint)
             {
+
                 pictureBox1.Image = null;
+
+                _tasks = new Task[3];
+
                 _myBitmap = new Bitmap(pictureBox1.Size.Width, pictureBox1.Size.Height);
 
                 _maze = new Maze((int)numericUpDown1.Value);
 
-                //_aStarThread = new(AStarSearchSteps);
-                
-                _mazeThread = new Thread(_maze.StartGenerate);
-                _paintThread = new Thread(PanelRepaint);
                 _lastPoint = new Vector2Int((int)numericUpDown2.Value, (int)numericUpDown3.Value);
 
-                _mazeThread.Name = "Generator";
-                //_aStarThread.Name = "AStar";
-                _paintThread.Name = "Painter";
+                _tasks[0] = Task.Factory.StartNew(() =>
+                    _maze.StartGenerate());
 
-                _mazeThread.Start();
-                Task t = Task.Run(() =>
+                _tasks[1] = Task.Factory.StartNew(() =>
                     AStarSearchSteps());
-                //_aStarThread.Start();
+
+                _tasks[2] = Task.Factory.StartNew(() =>
+                    PanelRepaint());
+
                 _paint = true;
-                _paintThread.Start();
 
             }
             else
@@ -137,23 +166,13 @@ namespace TEstAppForAStarPathing
                 _aStar = null;
                 AStarSearch.NullifyClosedCount();
                 _paint = false;
+                _tasks = null;
             }
-
-
-            /*_myBitmap = new Bitmap(pictureBox1.Size.Width, pictureBox1.Size.Height);
-
-            _maze = new Maze((int)numericUpDown1.Value, 10);
-            _maze.Create();
-
-            var g = Graphics.FromImage(_myBitmap);
-            PaintMaze(g);
-
-            pictureBox1.Image = _myBitmap;*/
         }
 
         private void AStarSearchSteps()
         {
-            while (true)
+            while (_paint)
             {
                 lock (_maze)
                 {
@@ -161,31 +180,29 @@ namespace TEstAppForAStarPathing
                     {
                         _grid = new(_maze.MazeList);
                         _aStar = new AStarSearch(_grid);
-
                         _path = _aStar.Find(_lastPoint);
                         _lastPoint = _path?.Last().Location ?? new Vector2Int(0, 0);
-
-                        Thread.Sleep(100);
                     }
                 }
-
+                Thread.Sleep(100);
             }
         }
 
-        private void RenderPath(Vector2Int start, Vector2Int goal, IList<Cell> path,
-            int scalar, Graphics g)
+        private void RenderPath(IList<Cell> path, int scalar, Graphics g)
         {
-
+            if(path == null)
+            {
+                return;
+            }
             PointF[] pathh = path.Select(n => new PointF(n.Location.X * scalar + scalar / 2, n.Location.Y * scalar + scalar / 2)).ToArray();
 
             if (pathh.Count() > 1)
             {
-                g.DrawLines(new Pen(new SolidBrush(Color.Blue), scalar / 8),
-                pathh);
+                g.DrawLines(new Pen(new SolidBrush(Color.Blue), scalar / 8), pathh);
             }
             if(pathh.Count() >= 1)
             {
-                CircleAtPoint(g, pathh.First(), _scalar/10, Color.Red);
+                CircleAtPoint(g, pathh.First(), scalar/ 10, Color.Red);
             }
         }
         private void CircleAtPoint(Graphics graphics, PointF center, float radius, Color color)
